@@ -1,0 +1,25 @@
+version: '3.3'
+
+services:
+  bot:
+    restart: always
+    build:
+      context: .
+    volumes:
+      - /src:/src
+    depends_on:
+      - bot_db
+    env_file:
+      - .env
+
+  bot_db:
+    image: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env.db
+    ports:
+      - 5432:5432
+
+volumes:
+  postgres_data:

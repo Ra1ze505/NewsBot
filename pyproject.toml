@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "newsbot"
+version = "0.1.0"
+description = ""
+authors = ["Ra1ze505 <87398772+Ra1ze505@users.noreply.github.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+SQLAlchemy = "^1.4.36"
+alembic = "^1.7.7"
+Telethon = "^1.24.0"
+psycopg2 = "^2.9.3"
+
+[tool.poetry.dev-dependencies]
+python-dotenv = "^0.20.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
