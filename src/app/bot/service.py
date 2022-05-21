@@ -1,15 +1,10 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import sessionmaker
 
-from config.db import engine
-
-from app.bot.models import User
+from app.models import User, get_async_session
 
 
-async_session = sessionmaker(
-        engine, expire_on_commit=False, class_=AsyncSession
-    )
+async_session = get_async_session()
 
 
 async def commit(session: AsyncSession):
@@ -25,11 +20,6 @@ async def user_create(chat_id):
         session.add(user)
         await commit(session)
 
-
-async def get_all_users():
-    async with async_session() as session:
-        stmt = select([User.chat_id])
-        return await session.execute(stmt)
 
 
 async def get_day_news():

@@ -27,8 +27,6 @@ target_metadata = db.Base.metadata
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
 
-print('#' * 80)
-print(db.connection_url)
 def run_migrations_offline():
     """Run migrations in 'offline' mode.
 
