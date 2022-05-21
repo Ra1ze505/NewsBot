@@ -4,6 +4,9 @@ import os
 try:
     from dotenv import load_dotenv
     load_dotenv('./.env')
+    load_dotenv('../.env')
+    load_dotenv('../../.env')
+    load_dotenv('../../../.env')
 except Exception as e:
     pass
 
@@ -19,3 +22,7 @@ DB_PASSWORD = os.environ.get('DB_PASSWORD')
 DB_HOST = os.environ.get('DB_HOST')
 DB_PORT = os.environ.get('DB_PORT')
 DB_NAME = os.environ.get('DB_NAME', 'database.db')
+
+# News chanel
+NEWS_CHANEL = os.environ.get('NEWS_CHANEL')
+KEY_WORD = os.environ.get('KEY_WORD')
