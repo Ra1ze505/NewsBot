@@ -1,6 +1,7 @@
 import asyncio
 
 from telethon import TelegramClient
+from telethon.errors import UserIsBlockedError
 
 from app.mailing.service import get_all_users, get_day_news
 from config.settings import BOT_TOKEN, API_ID, API_HASH
@@ -16,8 +17,13 @@ class Mailing:
         await asyncio.gather(*[self.mailing(user.chat_id, message) for user in users])
 
     async def mailing(self, user_id, message):
-        await self.client.send_message(user_id, message.text)
+        # todo need add field in db
+        try:
+            await self.client.send_message(user_id, message.text)
+        except UserIsBlockedError:
+            pass
 
 
 if __name__ == '__main__':
-    asyncio.run(Mailing().start_mailing())
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(Mailing().start_mailing())
