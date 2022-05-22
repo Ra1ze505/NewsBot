@@ -9,6 +9,9 @@ bot = TelegramClient('bot', API_ID, API_HASH).start(bot_token=BOT_TOKEN)
 
 @bot.on(events.NewMessage)
 async def handler(event):
+    if event.message.sender.bot:
+        return
+
     match event.raw_text:
         case '/start':
             await user_create(event.sender_id)
