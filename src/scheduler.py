@@ -10,8 +10,8 @@ def run_scheduler():
     scheduler = AsyncIOScheduler()
     parser_trigger = CronTrigger(hour='7', minute='30', second='0', timezone='Europe/Moscow')
     mailing_trigger = CronTrigger(hour='8', minute='0', second='0', timezone='Europe/Moscow')
-    scheduler.add_job(Parser().parse_last_news, 'interval', minutes=1)
-    scheduler.add_job(Mailing().start_mailing, 'interval', minutes=1)
+    scheduler.add_job(Parser().parse_last_news, parser_trigger)
+    scheduler.add_job(Mailing().start_mailing, mailing_trigger)
     scheduler.start()
 
     try:
