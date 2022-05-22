@@ -11,10 +11,11 @@ logger = logging.getLogger(__name__)
 
 async_session = get_async_session()
 
-PRETTY_MESSAGE = '''{city} 
-Cредняя температура {mean_temp}°C
-Максимальная температура {max_temp}°C
-Минимальная температура {min_temp}°C'''
+PRETTY_MESSAGE = '''**Погода в городе {city}**
+В течении дня:
+-- Cредняя температура  {mean_temp}°C
+-- Максимальная температура {max_temp}°C
+-- Минимальная температура {min_temp}°C'''
 
 
 async def create_news(message: Message):
@@ -36,13 +37,13 @@ class Weather:
     def __init__(self):
         pass
 
-    async def _get_weather(self, city):
+    async def _get_weather(self, city: str):
         async with aiohttp.ClientSession() as session:
             url = WEATHER_API_URL.format(city=city, token=WEATHER_API_KEY)
             async with session.get(url) as resp:
                 return await resp.json()
 
-    async def get_pretty_weather(self, city):
+    async def get_pretty_weather(self, city: str):
         weather = await self._get_weather(city)
 
         min_temp = int(min([temp['main']['temp_min'] for temp in weather['list']]))

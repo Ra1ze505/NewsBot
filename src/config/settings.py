@@ -21,3 +21,4 @@ KEY_WORD = os.environ.get('KEY_WORD')
 # Weather
 WEATHER_API_KEY = os.environ.get('WEATHER_API_KEY')
 WEATHER_API_URL = 'https://api.openweathermap.org/data/2.5/forecast?q={city}&cnt=6&appid={token}&units=metric&lang=ru'
+WEATHER_API_NOW_URL = 'https://api.openweathermap.org/data/2.5/weather?q={city}&appid={token}'

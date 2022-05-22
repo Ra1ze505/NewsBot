@@ -7,7 +7,7 @@ async_session = get_async_session()
 
 async def get_all_users():
     async with async_session() as session:
-        stmt = select([User.chat_id])
+        stmt = select([User.chat_id, User.city])
         return await session.execute(stmt)
 
 
