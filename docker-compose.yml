@@ -19,7 +19,7 @@ services:
     build:
       context: .
     entrypoint:
-      - /usr/app/scheduler.sh
+      - /usr/app/scheduler_entrypoint.sh
     volumes:
       - ./:/usr/app/
     depends_on:
