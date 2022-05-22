@@ -9,6 +9,11 @@ from config.settings import WEATHER_API_NOW_URL, WEATHER_API_KEY
 
 async_session = get_async_session()
 
+START_MESSAGE = '''
+**Привет!**
+Я новостной бот, который будет отправлять тебе каждое утро **новости** и **погоду**!
+'''
+
 
 async def commit(session: AsyncSession):
     try:
