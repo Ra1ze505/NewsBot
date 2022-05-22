@@ -2,10 +2,11 @@ import asyncio
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
-from mailing.run import Mailing
-from parser.run import Parser
+from app.mailing.run import Mailing
+from app.parser.run import Parser
 
-if __name__ == '__main__':
+
+def run_scheduler():
     scheduler = AsyncIOScheduler()
     parser_trigger = CronTrigger(hour='7', minute='30', second='0', timezone='Europe/Moscow')
     mailing_trigger = CronTrigger(hour='8', minute='0', second='0', timezone='Europe/Moscow')

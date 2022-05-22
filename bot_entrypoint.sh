@@ -10,4 +10,4 @@ then
 fi
 
 alembic upgrade head
-python3 src/bot_handler.py
+python3 src/main.py -m bot

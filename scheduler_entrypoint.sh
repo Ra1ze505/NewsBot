@@ -9,5 +9,5 @@ then
     echo "PostgreSQL started"
 fi
 
-alembic upgrade head
-python3 src/scheduler.py
+#alembic upgrade head
+python3 src/main.py -m scheduler

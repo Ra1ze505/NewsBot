@@ -1,4 +1,5 @@
 import logging
+
 from sqlalchemy.exc import IntegrityError
 from telethon.tl.types import Message
 
@@ -22,4 +23,5 @@ async def create_news(message: Message):
             await session.commit()
         except IntegrityError:
             logger.debug('News already exists')
+
 

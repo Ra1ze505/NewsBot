@@ -2,14 +2,15 @@ import asyncio
 
 from telethon import TelegramClient
 from telethon.errors import UserIsBlockedError
+from telethon.sessions import StringSession
 
-from mailing.service import get_all_users, get_day_news
+from app.mailing.service import get_all_users, get_day_news
 from config.settings import BOT_TOKEN, API_ID, API_HASH
 
 
 class Mailing:
     def __init__(self):
-        self.client = TelegramClient('mailing', API_ID, API_HASH).start(bot_token=BOT_TOKEN)
+        self.client = TelegramClient(StringSession(), API_ID, API_HASH).start(bot_token=BOT_TOKEN)
 
     async def start_mailing(self):
         users = await get_all_users()

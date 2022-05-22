@@ -1,10 +1,11 @@
 from telethon import events
+from telethon.sessions import StringSession
 from telethon.sync import TelegramClient
 
-from bot.service import user_create
+from app.bot.service import user_create
 from config.settings import BOT_TOKEN, API_ID, API_HASH
 
-bot = TelegramClient('bot', API_ID, API_HASH).start(bot_token=BOT_TOKEN)
+bot = TelegramClient(StringSession(), API_ID, API_HASH).start(bot_token=BOT_TOKEN)
 
 
 @bot.on(events.NewMessage)
@@ -19,5 +20,6 @@ async def handler(event):
         case _:
             await event.respond('I don\'t understand you!')
 
-with bot:
-    bot.run_until_disconnected()
+# For run bot
+# with bot:
+#     bot.run_until_disconnected()
