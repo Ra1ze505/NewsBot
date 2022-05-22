@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, Text, DateTime, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import sessionmaker
 
-from src.config.db import Base, engine
+from config.db import Base, engine
 
 
 class User(Base):

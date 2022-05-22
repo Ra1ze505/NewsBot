@@ -5,12 +5,27 @@ services:
     restart: always
     build:
       context: .
+    entrypoint:
+      - /usr/app/bot_entrypoint.sh
     volumes:
-      - /src:/src
+      - ./:/usr/app/
     depends_on:
       - bot_db
     env_file:
-      - .env
+      - .env.prod
+
+  schedule:
+    restart: always
+    build:
+      context: .
+    entrypoint:
+      - /usr/app/scheduler.sh
+    volumes:
+      - ./:/usr/app/
+    depends_on:
+      - bot_db
+    env_file:
+      - .env.prod
 
   bot_db:
     image: postgres

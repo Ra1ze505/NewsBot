@@ -1,7 +1,7 @@
 from telethon import events
 from telethon.sync import TelegramClient
 
-from app.bot.service import user_create
+from bot.service import user_create
 from config.settings import BOT_TOKEN, API_ID, API_HASH
 
 bot = TelegramClient('bot', API_ID, API_HASH).start(bot_token=BOT_TOKEN)

@@ -1,6 +1,6 @@
 from sqlalchemy import select, func
 
-from app.models import NewsMessage, get_async_session, User
+from models import NewsMessage, get_async_session, User
 
 async_session = get_async_session()
 

@@ -1,12 +1,8 @@
 import logging
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import sessionmaker
 from telethon.tl.types import Message
 
-from app.models import NewsMessage, get_async_session
-from config.db import engine
-
+from models import NewsMessage, get_async_session
 
 logger = logging.getLogger(__name__)
 

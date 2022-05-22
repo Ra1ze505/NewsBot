@@ -1,6 +1,6 @@
 from telethon import TelegramClient
 
-from app.parser.service import create_news
+from parser.service import create_news
 from config.settings import API_ID, API_HASH, NEWS_CHANEL, KEY_WORD
 
 
@@ -13,3 +13,7 @@ class Parser:
         async for message in self.client.iter_messages(chat, search=KEY_WORD):
             await create_news(message)
             break
+
+if __name__ == '__main__':
+    p = Parser()
+    p.client.loop.run_until_complete(p.parse_last_news())

@@ -3,7 +3,7 @@ import asyncio
 from telethon import TelegramClient
 from telethon.errors import UserIsBlockedError
 
-from app.mailing.service import get_all_users, get_day_news
+from mailing.service import get_all_users, get_day_news
 from config.settings import BOT_TOKEN, API_ID, API_HASH
 
 
