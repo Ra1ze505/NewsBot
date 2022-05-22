@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, Text, DateTime, func
+from sqlalchemy import Column, Integer, Text, DateTime, func, String
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import sessionmaker
 
@@ -10,6 +10,7 @@ class User(Base):
     __table_args__ = {'extend_existing': True}
     id = Column(Integer, primary_key=True)
     chat_id = Column(Integer, unique=True)
+    city = Column(String(50), default='Москва')
 
 
 class NewsMessage(Base):

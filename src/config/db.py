@@ -1,8 +1,7 @@
-from sqlalchemy import create_engine
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import declarative_base
 
-from .settings import DB_NAME, DB_USERNAME, DB_PASSWORD, DB_HOST, DB_PORT, DB_DRIVER
+from .settings import DB_NAME, DB_USERNAME, DB_PASSWORD, DB_HOST, DB_PORT
 
 
 Base = declarative_base()
