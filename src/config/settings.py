@@ -1,15 +1,6 @@
 import os
 
 
-try:
-    from dotenv import load_dotenv
-    load_dotenv('./.env')
-    load_dotenv('../.env')
-    load_dotenv('../../.env')
-    load_dotenv('../../../.env')
-except Exception as e:
-    pass
-
 # Bot settings
 BOT_TOKEN = os.environ.get('BOT_TOKEN')
 API_ID = os.environ.get('API_ID')
