@@ -18,7 +18,7 @@ async def handler(event):
         case '/start':
             await user_create(event.sender_id)
             await event.respond(START_MESSAGE, buttons=start_markup)
-        case 'Изменить мой регион':
+        case 'Изменить город':
             async with bot.conversation(event.sender_id) as conv:
                 await change_city(conv)
 
