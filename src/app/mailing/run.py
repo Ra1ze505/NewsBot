@@ -4,6 +4,7 @@ from telethon import TelegramClient
 from telethon.errors import UserIsBlockedError
 from telethon.sessions import StringSession
 
+from app.bot.buttons import start_markup
 from app.mailing.service import get_all_users, get_day_news
 from app.parser.service import Weather, get_pretty_rate
 from config.settings import BOT_TOKEN, API_ID, API_HASH
@@ -28,7 +29,7 @@ class Mailing:
         # todo need add field in db
         try:
             for message in messages:
-                await self.client.send_message(user_id, message)
+                await self.client.send_message(user_id, message, buttons=start_markup)
         except UserIsBlockedError:
             pass
 
