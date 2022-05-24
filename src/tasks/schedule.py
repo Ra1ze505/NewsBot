@@ -1,7 +1,6 @@
 import asyncio
 from datetime import datetime, timedelta, date
 from celery import Celery
-from celery.signals import worker_ready
 from celery.schedules import crontab
 
 from app.mailing.run import Mailing
