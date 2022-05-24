@@ -5,12 +5,17 @@ from celery.schedules import crontab
 from celery.signals import worker_ready
 
 from app.mailing.run import Mailing
+from app.parser.run import Parser
 from tasks.service import get_users
 
 app = Celery('tasks', broker='redis://redis:6379/0')
 
 
 app.conf.beat_schedule = {
+    'parse-news-every-day': {
+        'task': 'tasks.schedule.parse_news',
+        'schedule': crontab(hour=0),
+    },
     'add-mailing-tasks-every-day': {
         'task': 'tasks.schedule.create_day_task',
         'schedule': crontab(hour=0),
@@ -21,6 +26,13 @@ app.conf.beat_schedule = {
 @worker_ready.connect
 def on_worker_ready(sender, **kwargs):
     sender.app.send_task('tasks.schedule.create_day_task')
+    sender.app.send_task('tasks.schedule.parse_news')
+
+
+@app.task
+def parse_news():
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(Parser().parse_last_news())
 
 
 @app.task
