@@ -11,6 +11,13 @@ async def get_all_users():
         return await session.execute(stmt)
 
 
+async def get_user_by_chat_id(chat_id):
+    async with async_session() as session:
+        stmt = select([User.chat_id, User.city]).where(User.chat_id == chat_id)
+        result = await session.execute(stmt)
+        return result.fetchone()
+
+
 async def get_day_news():
     """
     Get news messages from database

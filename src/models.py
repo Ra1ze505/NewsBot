@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, Text, DateTime, func, String
+import datetime
+from sqlalchemy import Column, Integer, Text, DateTime, func, String, Time
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import sessionmaker
 
@@ -11,6 +12,8 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     chat_id = Column(Integer, unique=True)
     city = Column(String(50), default='Москва')
+    timezone = Column(Integer, default=3)
+    time_mailing = Column(Time, default=datetime.time(hour=8, minute=0))
 
 
 class NewsMessage(Base):
