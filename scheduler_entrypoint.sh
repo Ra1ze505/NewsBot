@@ -9,5 +9,6 @@ then
     echo "PostgreSQL started"
 fi
 
-#alembic upgrade head
-python3 src/main.py -m scheduler
+# shellcheck disable=SC2164
+cd src
+celery -A tasks.schedule.app worker -B

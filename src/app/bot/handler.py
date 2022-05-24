@@ -2,7 +2,7 @@ from telethon import events
 from telethon.sessions import StringSession
 from telethon.sync import TelegramClient
 
-from app.bot.service import user_create, change_city, START_MESSAGE
+from app.bot.service import user_create, change_city, START_MESSAGE, change_time_mailing
 from config.settings import BOT_TOKEN, API_ID, API_HASH
 from app.bot.buttons import start_markup
 
@@ -21,6 +21,9 @@ async def handler(event):
         case 'Изменить город':
             async with bot.conversation(event.sender_id) as conv:
                 await change_city(conv)
+        case 'Изменить время рассылки':
+            async with bot.conversation(event.sender_id) as conv:
+                await change_time_mailing(conv)
 
 
 # For run bot

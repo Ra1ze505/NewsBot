@@ -1,3 +1,4 @@
+from datetime import datetime
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 import aiohttp
@@ -36,17 +37,32 @@ async def get_user_city(chat_id: int):
         return user.fetchone().city
 
 
+async def get_time_mailing(chat_id: int):
+    async with async_session() as session:
+        stmt = select([User.time_mailing]).where(User.chat_id == chat_id)
+        user = await session.execute(stmt)
+        return user.fetchone().time_mailing
+
+
 async def valid_city(city: str):
     async with aiohttp.ClientSession() as session:
         async with session.get(WEATHER_API_NOW_URL.format(city=city, token=WEATHER_API_KEY)) as resp:
             if resp.status == 200:
-                return True
-            return False
+                data = await resp.json()
+                return True, data['timezone'] / 3600
+            return False, None
 
 
-async def user_city_update(chat_id: int, city: str):
+async def user_city_update(chat_id: int, city: str, timezone: int):
     async with async_session() as session:
-        stmt = User.__table__.update().where(User.chat_id == chat_id).values(city=city)
+        stmt = User.__table__.update().where(User.chat_id == chat_id).values(city=city, timezone=timezone)
+        await session.execute(stmt)
+        await commit(session)
+
+
+async def user_time_mailing_update(chat_id: int, time_mailing: datetime.time):
+    async with async_session() as session:
+        stmt = User.__table__.update().where(User.chat_id == chat_id).values(time_mailing=time_mailing)
         await session.execute(stmt)
         await commit(session)
 
@@ -54,9 +70,9 @@ async def user_city_update(chat_id: int, city: str):
 async def change_city(conv):
     city = await get_user_city(conv.chat_id)
     await conv.send_message(f'Ваш город сейчас: {city}\nНапишите свой город', buttons=cansel_markup)
-    new_city, updated = await _get_city(conv, city)
+    new_city, timezone, updated = await _get_city(conv, city)
     if updated:
-        await user_city_update(conv.chat_id, new_city)
+        await user_city_update(conv.chat_id, new_city, timezone)
         await conv.send_message(f'Ваш город изменен на: {new_city}', buttons=start_markup)
     else:
         await conv.send_message('Ваш город не изменен', buttons=start_markup)
@@ -65,10 +81,35 @@ async def change_city(conv):
 async def _get_city(conv, city: str = None):
     answer = await conv.get_response()
     if answer.text == 'Отмена':
-        return city, False
-    valid = await valid_city(answer.raw_text)
+        return city, None, False
+    valid, timezone = await valid_city(answer.raw_text)
     if valid:
-        return answer.raw_text, True
+        return answer.raw_text, timezone, True
     else:
         await conv.send_message('Некорректный город\nПопробуйте еще раз')
         return await _get_city(conv)
+
+
+async def change_time_mailing(conv):
+    time_mailing: datetime.time = await get_time_mailing(conv.chat_id)
+    await conv.send_message(f'Ваше время получения новостей сейчас: {time_mailing.strftime("%H:%M")}\nОтправьте новое '
+                            f'время получения новостей', buttons=cansel_markup)
+    new_time_mailing, updated = await _get_time_mailing(conv, time_mailing)
+    if updated:
+        await user_time_mailing_update(conv.chat_id, new_time_mailing)
+        await conv.send_message(f'Ваше время получения новостей изменено на: {new_time_mailing.strftime("%H:%M")}',
+                                buttons=start_markup)
+    else:
+        await conv.send_message('Ваше время получения новостей не изменено', buttons=start_markup)
+
+
+async def _get_time_mailing(conv, time_mailing: str = None):
+    answer = await conv.get_response()
+    if answer.text == 'Отмена':
+        return time_mailing, False
+    try:
+        new_time = datetime.strptime(answer.raw_text, '%H:%M').time()
+        return new_time, True
+    except ValueError:
+        await conv.send_message('Некорректное время\nПопробуйте еще раз')
+        return await _get_time_mailing(conv)
