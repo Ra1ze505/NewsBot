@@ -2,11 +2,12 @@ import asyncio
 from datetime import datetime, timedelta, date
 from celery import Celery
 from celery.schedules import crontab
+from celery.signals import worker_ready
 
 from app.mailing.run import Mailing
 from tasks.service import get_users
 
-app = Celery('tasks', broker='redis://localhost:6379/0')
+app = Celery('tasks', broker='redis://redis:6379/0')
 
 
 app.conf.beat_schedule = {
@@ -15,6 +16,11 @@ app.conf.beat_schedule = {
         'schedule': crontab(hour=0),
     },
 }
+
+
+@worker_ready.connect
+def on_worker_ready(sender, **kwargs):
+    sender.app.send_task('tasks.schedule.create_day_task')
 
 
 @app.task
