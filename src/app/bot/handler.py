@@ -27,5 +27,5 @@ async def handler(event):
 
 
 # For run bot
-with bot:
-    bot.run_until_disconnected()
+# with bot:
+#     bot.run_until_disconnected()
