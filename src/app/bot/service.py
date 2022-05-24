@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 import aiohttp
 
-from app.bot.buttons import cansel_markup, start_markup
+from app.bot.buttons import cansel_markup, start_markup, change_time_markup, change_city_markup
 from models import User, get_async_session
 from config.settings import WEATHER_API_NOW_URL, WEATHER_API_KEY
 
@@ -71,7 +71,7 @@ async def user_time_mailing_update(chat_id: int, time_mailing: datetime.time):
 
 async def change_city(conv):
     city = await get_user_city(conv.chat_id)
-    await conv.send_message(f'Ваш город сейчас: {city}\nНапишите свой город', buttons=cansel_markup)
+    await conv.send_message(f'Ваш город сейчас: {city}\nНапишите свой город', buttons=change_city_markup)
     new_city, timezone, updated = await _get_city(conv, city)
     if updated:
         await user_city_update(conv.chat_id, new_city, timezone)
@@ -95,7 +95,7 @@ async def _get_city(conv, city: str = None):
 async def change_time_mailing(conv):
     time_mailing: datetime.time = await get_time_mailing(conv.chat_id)
     await conv.send_message(f'Ваше время получения рассылки сейчас: {time_mailing.strftime("%H:%M")}\nОтправьте новое '
-                            f'время получения рассылки', buttons=cansel_markup)
+                            f'время получения рассылки', buttons=change_time_markup)
     new_time_mailing, updated = await _get_time_mailing(conv, time_mailing)
     if updated:
         await user_time_mailing_update(conv.chat_id, new_time_mailing)
