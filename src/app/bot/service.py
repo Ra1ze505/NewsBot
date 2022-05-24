@@ -12,7 +12,9 @@ async_session = get_async_session()
 
 START_MESSAGE = '''
 **Привет!**
-Я новостной бот, который будет отправлять тебе каждое утро **новости**, **погоду** и **курс валют**!
+Я новостной бот, который будет отправлять вам каждое утро **новости**, **погоду** и **курс валют**!
+По умолчанию я отправляю вам новости и погоду в Москве в 8 утра, но ты можешь изменить эти настройки.
+Не переживайте за разницу во времени, все будет в порядке.
 '''
 
 
@@ -92,15 +94,15 @@ async def _get_city(conv, city: str = None):
 
 async def change_time_mailing(conv):
     time_mailing: datetime.time = await get_time_mailing(conv.chat_id)
-    await conv.send_message(f'Ваше время получения новостей сейчас: {time_mailing.strftime("%H:%M")}\nОтправьте новое '
-                            f'время получения новостей', buttons=cansel_markup)
+    await conv.send_message(f'Ваше время получения рассылки сейчас: {time_mailing.strftime("%H:%M")}\nОтправьте новое '
+                            f'время получения рассылки', buttons=cansel_markup)
     new_time_mailing, updated = await _get_time_mailing(conv, time_mailing)
     if updated:
         await user_time_mailing_update(conv.chat_id, new_time_mailing)
-        await conv.send_message(f'Ваше время получения новостей изменено на: {new_time_mailing.strftime("%H:%M")}',
+        await conv.send_message(f'Ваше время получения рассылки изменено на: {new_time_mailing.strftime("%H:%M")}',
                                 buttons=start_markup)
     else:
-        await conv.send_message('Ваше время получения новостей не изменено', buttons=start_markup)
+        await conv.send_message('Ваше время получения рассылки не изменено', buttons=start_markup)
 
 
 async def _get_time_mailing(conv, time_mailing: str = None):
