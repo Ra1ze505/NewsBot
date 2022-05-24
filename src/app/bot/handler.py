@@ -21,6 +21,9 @@ async def handler(event):
         case 'Изменить город':
             async with bot.conversation(event.sender_id) as conv:
                 await change_city(conv)
+        case 'Изменить время рассылки':
+            async with bot.conversation(event.sender_id) as conv:
+                await change_time_mailing(conv)
 
 
 # For run bot
