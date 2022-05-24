@@ -3,6 +3,7 @@ from telethon.sessions import StringSession
 from telethon.sync import TelegramClient
 
 from app.bot.service import user_create, change_city, START_MESSAGE, change_time_mailing
+from app.parser.service import get_weather, get_pretty_rate
 from config.settings import BOT_TOKEN, API_ID, API_HASH
 from app.bot.buttons import start_markup
 
@@ -24,6 +25,12 @@ async def handler(event):
         case 'Изменить время рассылки':
             async with bot.conversation(event.sender_id) as conv:
                 await change_time_mailing(conv)
+        case 'Погода':
+            weather_message = await get_weather(event.sender_id)
+            await event.respond(weather_message)
+        case 'Курс':
+            rate_message = await get_pretty_rate()
+            await event.respond(rate_message)
 
 
 # For run bot
