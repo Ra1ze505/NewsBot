@@ -25,3 +25,6 @@ WEATHER_API_NOW_URL = 'https://api.openweathermap.org/data/2.5/weather?q={city}&
 
 # Currency rates
 CURRENCY_API_URL = 'https://www.cbr-xml-daily.ru/daily_json.js'
+
+# Celery
+CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL')
