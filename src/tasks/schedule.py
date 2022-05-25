@@ -5,9 +5,11 @@ from celery.schedules import crontab
 
 from app.mailing.run import Mailing
 from app.parser.run import Parser
+from config.settings import CELERY_BROKER_URL
 from tasks.service import get_users
 
-app = Celery('tasks', broker='redis://redis:6379/0')
+
+app = Celery('tasks', broker=CELERY_BROKER_URL)
 
 
 app.conf.beat_schedule = {
