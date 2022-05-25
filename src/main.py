@@ -1,4 +1,4 @@
-from app.bot.handler import bot
+from app.bot.handlers import bot
 
 
 with bot:

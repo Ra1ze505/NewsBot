@@ -100,7 +100,8 @@ async def change_time_mailing(conv):
     new_time_mailing, updated = await _get_time_mailing(conv, time_mailing)
     if updated:
         await user_time_mailing_update(conv.chat_id, new_time_mailing)
-        await conv.send_message(f'Ваше время получения рассылки изменено на: {new_time_mailing.strftime("%H:%M")}',
+        await conv.send_message(f'Ваше время получения рассылки изменено на: {new_time_mailing.strftime("%H:%M")}.\n'
+                                f'Время отправки изменится через час',
                                 buttons=start_markup)
     else:
         await conv.send_message('Ваше время получения рассылки не изменено', buttons=start_markup)
