@@ -31,15 +31,15 @@ async def change_time_mailing_handler(event):
 @bot.on(events.NewMessage(pattern='Погода'))
 async def weather_handler(event):
     weather_message = await get_weather(event.sender_id)
-    await event.respond(weather_message)
+    await event.respond(weather_message, buttons=start_markup)
 
 
 @bot.on(events.NewMessage(pattern='Курс'))
 async def rate_handler(event):
     rate_message = await get_pretty_rate()
-    await event.respond(rate_message)
+    await event.respond(rate_message, buttons=start_markup)
 
 
 # For run bot
-with bot:
-    bot.run_until_disconnected()
+# with bot:
+#     bot.run_until_disconnected()
