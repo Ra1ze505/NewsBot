@@ -96,7 +96,8 @@ async def _get_city(conv, city: str = None):
 async def change_time_mailing(conv):
     time_mailing: datetime.time = await get_time_mailing(conv.chat_id)
     await conv.send_message(f'Ваше время получения рассылки сейчас: {time_mailing.strftime("%H:%M")}\nОтправьте новое '
-                            f'время получения рассылки', buttons=change_time_markup)
+                            f'время получения рассылки\nP.S. вы можете указать любое время☺️',
+                            buttons=change_time_markup)
     new_time_mailing, updated = await _get_time_mailing(conv, time_mailing)
     if updated:
         await user_time_mailing_update(conv.chat_id, new_time_mailing)
