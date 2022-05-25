@@ -75,7 +75,9 @@ async def get_pretty_rate():
     :return: str
     """
     rate = await _get_rate()
-    return PRETTY_RATE_MESSAGE.format(usd=rate['Valute']['USD']['Value'], eur=rate['Valute']['EUR']['Value'])
+    usd = round(rate['Valute']['USD']['Value'], 2)
+    eur = round(rate['Valute']['EUR']['Value'], 2)
+    return PRETTY_RATE_MESSAGE.format(usd=usd, eur=eur)
 
 
 async def _get_rate():
