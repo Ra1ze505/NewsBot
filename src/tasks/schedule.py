@@ -33,14 +33,14 @@ app.conf.beat_schedule = {
 
 @app.task
 def parse_news():
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(Parser().parse_last_news())
+    parser = Parser()
+    parser.client.loop.run_until_complete(Parser().parse_last_news())
 
 
 @app.task
 def run_mailing(chat_id):
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(Mailing().send_mailing(chat_id))
+    mailing = Mailing()
+    mailing.client.loop.run_until_complete(Mailing().send_mailing(chat_id))
 
 
 @app.task
