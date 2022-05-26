@@ -17,31 +17,31 @@ async def start_handler(event):
     await event.respond(START_MESSAGE, buttons=start_markup)
 
 
-@bot.on(events.NewMessage(pattern='Изменить город'))
+@bot.on(events.NewMessage(pattern=r'Изменить\sгород$'))
 async def change_city_handler(event):
     async with bot.conversation(event.sender_id) as conv:
         await change_city(conv)
 
 
-@bot.on(events.NewMessage(pattern='Изменить время рассылки'))
+@bot.on(events.NewMessage(pattern=r'Изменить\sвремя\sрассылки$'))
 async def change_time_mailing_handler(event):
     async with bot.conversation(event.sender_id) as conv:
         await change_time_mailing(conv)
 
 
-@bot.on(events.NewMessage(pattern='Погода'))
+@bot.on(events.NewMessage(pattern=r'Погода$'))
 async def weather_handler(event):
     weather_message = await get_weather(event.sender_id)
     await event.respond(weather_message, buttons=start_markup)
 
 
-@bot.on(events.NewMessage(pattern='Курс'))
+@bot.on(events.NewMessage(pattern=r'Курс$'))
 async def rate_handler(event):
     rate_message = await get_pretty_rate()
     await event.respond(rate_message, buttons=start_markup)
 
 
-@bot.on(events.NewMessage(pattern='Новости'))
+@bot.on(events.NewMessage(pattern=r'Новости$'))
 async def help_handler(event):
     news = await get_day_news()
     await event.respond(news.text, buttons=start_markup)
