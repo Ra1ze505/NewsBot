@@ -12,7 +12,7 @@ from config.settings import BOT_TOKEN, API_ID, API_HASH
 
 class Mailing:
     def __init__(self):
-        self.client = TelegramClient('mailing', API_ID, API_HASH).start(bot_token=BOT_TOKEN)
+        self.client = TelegramClient(StringSession(), API_ID, API_HASH).start(bot_token=BOT_TOKEN)
 
     async def send_mailing(self, user_id: int):
         user = await get_user_by_chat_id(user_id)
