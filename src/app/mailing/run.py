@@ -18,9 +18,8 @@ class Mailing:
         user = await get_user_by_chat_id(user_id)
         news_message = await get_day_news()
         rate_message = await get_pretty_rate()
-        await self.mailing(user.chat_id, [await Weather().get_pretty_weather_by_day(user.city),
-                                          rate_message,
-                                          news_message.text])
+        weather_message = await Weather().get_pretty_weather_by_day(user.city)
+        await self.mailing(user.chat_id, [weather_message, rate_message, news_message.text])
 
     async def start_mailing(self):
         users = await get_all_users()
