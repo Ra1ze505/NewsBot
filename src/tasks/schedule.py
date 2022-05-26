@@ -17,9 +17,9 @@ app.conf.beat_schedule = {
         'task': 'tasks.schedule.parse_news',
         'schedule': crontab(minute=0, hour='*'),
     },
-    'add-mailing-tasks-every-hour': {
+    'add-mailing-tasks-every-30-minute': {
         'task': 'tasks.schedule.create_hour_task',
-        'schedule': crontab(minute=0, hour='*'),
+        'schedule': timedelta(minutes=30),
     },
 }
 
@@ -27,8 +27,8 @@ app.conf.beat_schedule = {
 # @worker_ready.connect
 # def on_worker_ready(sender, **kwargs):
 #     print('Worker ready!')
-#     sender.app.send_task('tasks.schedule.create_day_task')
-#     sender.app.send_task('tasks.schedule.parse_news')
+#     sender.app.send_task('tasks.schedule.run_mailing', args=[398410104])
+    # sender.app.send_task('tasks.schedule.parse_news')
 
 
 @app.task
@@ -53,11 +53,10 @@ async def get_hour_task():
     users = await get_users()
     for user in users:
         datetime_mailing = datetime.combine(date.today(), user.time_mailing) - timedelta(hours=user.timezone)
-        if timedelta() < datetime_mailing - datetime.utcnow() < timedelta(hours=1):
+        if timedelta(minutes=30) < datetime_mailing - datetime.utcnow() < timedelta(hours=1):
             delta = datetime_mailing - datetime.utcnow()
             run_mailing.apply_async(args=(user.chat_id,), countdown=delta.seconds)
 
 
 if __name__ == '__main__':
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(create_hour_task())
+    run_mailing(398410104)
