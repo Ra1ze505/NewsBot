@@ -1,0 +1,62 @@
+version: '3.3'
+
+services:
+  bot:
+    restart: always
+    build:
+      context: .
+    entrypoint:
+      - /usr/app/bot_entrypoint.sh
+    volumes:
+      - ./:/usr/app/
+    depends_on:
+      - bot_db
+    env_file:
+      - .env.prod
+
+  schedule:
+    restart: always
+    build:
+      context: .
+    entrypoint:
+      - /usr/app/scheduler_entrypoint.sh
+    volumes:
+      - ./:/usr/app/
+    depends_on:
+      - bot_db
+    env_file:
+      - .env.prod
+
+  bot_db:
+    image: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env.db
+    ports:
+      - 5432:5432
+
+  redis:
+    image: redis
+    restart: always
+    container_name: 'redis'
+    command: redis-server
+    working_dir: /data
+    volumes:
+      - redis-data:/data
+      - /etc/localtime:/etc/localtime
+    expose:
+      - 6379
+
+  flower:
+    image: mher/flower
+    ports:
+      - 5555:5555
+    env_file:
+      - ./.env.prod
+    depends_on:
+      - schedule
+
+volumes:
+  postgres_data:
+  redis-data:
