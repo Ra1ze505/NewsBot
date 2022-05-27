@@ -33,10 +33,9 @@ class Mailing:
         ]) for user in users])
 
     async def mailing(self, user_id: str, messages: list[str]):
-        # todo need add field in db
         try:
-            for message in messages:
-                await self.client.send_message(user_id, message, buttons=start_markup)
+            message = '\n'.join(messages)
+            await self.client.send_message(user_id, message, buttons=start_markup)
         except UserIsBlockedError:
             pass
 

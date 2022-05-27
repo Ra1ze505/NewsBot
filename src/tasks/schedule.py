@@ -11,7 +11,6 @@ from tasks.service import get_users
 
 app = Celery('tasks', broker=CELERY_BROKER_URL)
 
-
 app.conf.beat_schedule = {
     'parse-news-every-day': {
         'task': 'tasks.schedule.parse_news',
@@ -22,13 +21,6 @@ app.conf.beat_schedule = {
         'schedule': timedelta(minutes=30),
     },
 }
-
-
-# @worker_ready.connect
-# def on_worker_ready(sender, **kwargs):
-#     print('Worker ready!')
-#     sender.app.send_task('tasks.schedule.run_mailing', args=[398410104])
-    # sender.app.send_task('tasks.schedule.parse_news')
 
 
 @app.task
@@ -56,7 +48,3 @@ async def get_hour_task():
         if timedelta(minutes=30) < datetime_mailing - datetime.utcnow() < timedelta(hours=1):
             delta = datetime_mailing - datetime.utcnow()
             run_mailing.apply_async(args=(user.chat_id,), countdown=delta.seconds)
-
-
-if __name__ == '__main__':
-    run_mailing(398410104)
