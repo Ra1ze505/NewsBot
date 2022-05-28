@@ -4,10 +4,11 @@ from telethon.client.buttons import ButtonMethods
 
 start_markup = ButtonMethods.build_reply_markup(
     [[Button.text('Погода', resize=True), Button.text('Курс'), Button.text('Новости')],
-     [Button.text('Изменить город'), Button.text('Изменить время рассылки')]
+     [Button.text('Изменить город'), Button.text('Изменить время рассылки')],
+     [Button.text('О боте'), Button.text('Написать нам')]
      ])
 
-cansel_markup = [Button.text('Отмена')]
+cansel_markup = [Button.text('Отмена', resize=True)]
 
 change_time_markup = ButtonMethods.build_reply_markup(
     [[Button.text('8:00', resize=True), Button.text('10:00'), Button.text('12:00')],
