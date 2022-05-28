@@ -6,7 +6,7 @@ from telethon.sessions import StringSession
 
 from app.bot.buttons import start_markup
 from app.mailing.service import get_all_users, get_day_news, get_user_by_chat_id
-from app.parser.service import Weather, get_pretty_rate
+from app.parser.service import WeatherService, get_pretty_rate
 from config.settings import BOT_TOKEN, API_ID, API_HASH
 
 
@@ -18,7 +18,7 @@ class Mailing:
         user = await get_user_by_chat_id(user_id)
         news_message = await get_day_news()
         rate_message = await get_pretty_rate()
-        weather_message = await Weather().get_pretty_weather_by_day(user.city)
+        weather_message = await WeatherService().get_pretty_weather_by_day(user.city)
         await self.mailing(user.chat_id, [weather_message, rate_message, news_message.text])
 
     async def start_mailing(self):
@@ -27,7 +27,7 @@ class Mailing:
         rate_message = await get_pretty_rate()
 
         await asyncio.gather(*[self.mailing(user.chat_id, [
-            await Weather().get_pretty_weather_by_day(user.city),
+            await WeatherService().get_pretty_weather_by_day(user.city),
             rate_message,
             news_message.text
         ]) for user in users])
