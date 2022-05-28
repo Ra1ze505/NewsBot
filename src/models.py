@@ -24,6 +24,15 @@ class NewsMessage(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now(), unique=True)
 
 
+class Feedback(Base):
+    __tablename__ = 'feedback'
+    __table_args__ = {'extend_existing': True}
+    id = Column(Integer, primary_key=True)
+    user = Column(Integer, ForeignKey('user.chat_id'))
+    text = Column(Text)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+
 def get_async_session():
     return sessionmaker(
         engine, expire_on_commit=False, class_=AsyncSession
