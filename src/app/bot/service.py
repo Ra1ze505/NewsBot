@@ -1,13 +1,13 @@
 from datetime import datetime
+from typing import Optional
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 import aiohttp
 
 from app.bot.buttons import cansel_markup, start_markup, change_time_markup, change_city_markup
-from models import User, get_async_session
+from models import User, Feedback, get_async_session
 from config.settings import WEATHER_API_NOW_URL, WEATHER_API_KEY
-
 
 async_session = get_async_session()
 
@@ -119,3 +119,27 @@ async def _get_time_mailing(conv, time_mailing: str = None) -> (datetime.time, b
         await conv.send_message('Некорректное время\nПопробуйте еще раз')
         return await _get_time_mailing(conv)
 
+
+async def get_feedback(conv) -> None:
+    await conv.send_message('Отправьте свой отзыв', buttons=cansel_markup)
+    feedback = await _get_feedback(conv)
+    if feedback is None:
+        return await conv.send_message('Отзыв отменен', buttons=start_markup)
+    await conv.send_message(f'Ваше сообщение: {feedback}')
+    await conv.send_message('Отправляем...')
+    await create_feedback(feedback, conv.chat_id)
+    return await conv.send_message('Спасибо за отзыв!', buttons=start_markup)
+
+
+async def create_feedback(text: str, chat_id: int) -> None:
+    async with async_session() as session:
+        feedback = Feedback(text=text, user=chat_id)
+        session.add(feedback)
+        await commit(session)
+
+
+async def _get_feedback(conv) -> Optional[str]:
+    answer = await conv.get_response()
+    if answer.text == 'Отмена':
+        return None
+    return answer.raw_text

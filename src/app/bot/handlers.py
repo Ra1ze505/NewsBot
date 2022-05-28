@@ -2,7 +2,7 @@ from telethon import events
 from telethon.sessions import StringSession
 from telethon.sync import TelegramClient
 
-from app.bot.service import user_create, change_city, START_MESSAGE, change_time_mailing, get_user_city
+from app.bot.service import user_create, change_city, START_MESSAGE, change_time_mailing, get_user_city, get_feedback
 from app.mailing.service import get_day_news
 from app.parser.service import WeatherService, get_pretty_rate
 from config.settings import BOT_TOKEN, API_ID, API_HASH
@@ -48,6 +48,13 @@ async def help_handler(event: events.NewMessage.Event):
     await event.respond(news.text, buttons=start_markup)
 
 
+@bot.on(events.NewMessage(pattern=r'Написать\sнам$'))
+async def write_us_handler(event: events.NewMessage.Event):
+    async with bot.conversation(event.sender_id) as conv:
+        await get_feedback(conv)
+
+
+
 # For run bot
-# with bot:
-#     bot.run_until_disconnected()
+with bot:
+    bot.run_until_disconnected()
