@@ -1,5 +1,5 @@
 import datetime
-from sqlalchemy import Column, Integer, Text, DateTime, func, String, Time
+from sqlalchemy import Column, Integer, Text, DateTime, func, String, Time, ForeignKey
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import sessionmaker
 
