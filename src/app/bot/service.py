@@ -120,7 +120,7 @@ async def _get_time_mailing(conv, time_mailing: str = None) -> (datetime.time, b
         return await _get_time_mailing(conv)
 
 
-async def get_feedback(conv) -> None:
+async def get_feedback(conv) -> str:
     await conv.send_message('Отправьте свой отзыв', buttons=cansel_markup)
     feedback = await _get_feedback(conv)
     if feedback is None:
@@ -128,7 +128,8 @@ async def get_feedback(conv) -> None:
     await conv.send_message(f'Ваше сообщение: {feedback}')
     await conv.send_message('Отправляем...')
     await create_feedback(feedback, conv.chat_id)
-    return await conv.send_message('Спасибо за отзыв!', buttons=start_markup)
+    await conv.send_message('Спасибо за отзыв!', buttons=start_markup)
+    return feedback
 
 
 async def create_feedback(text: str, chat_id: int) -> None:
