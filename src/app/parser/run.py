@@ -4,7 +4,7 @@ import aiohttp
 from telethon import TelegramClient
 from telethon.sessions import StringSession
 
-from app.parser.service import create_news, _get_rate, create_rate
+from app.parser.service import create_news, create_rate
 from config.settings import API_ID, API_HASH, NEWS_CHANEL, KEY_WORD, STRING_SESSION, CURRENCY_API_URL
 
 
