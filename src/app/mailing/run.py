@@ -5,8 +5,8 @@ from telethon.errors import UserIsBlockedError
 from telethon.sessions import StringSession
 
 from app.bot.buttons import start_markup
-from app.mailing.service import get_all_users, get_day_news, get_user_by_chat_id
-from app.parser.service import WeatherService, get_pretty_rate
+from app.mailing.service import get_all_users, get_day_news, get_user_by_chat_id, get_pretty_rate
+from app.parser.service import WeatherService
 from config.settings import BOT_TOKEN, API_ID, API_HASH
 
 

@@ -1,5 +1,5 @@
 import datetime
-from sqlalchemy import Column, Integer, Text, DateTime, func, String, Time, ForeignKey
+from sqlalchemy import Column, Integer, Text, DateTime, func, String, Time, ForeignKey, JSON
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import sessionmaker
 
@@ -22,6 +22,14 @@ class NewsMessage(Base):
     id = Column(Integer, primary_key=True)
     text = Column(Text)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), unique=True)
+
+
+class Rate(Base):
+    __tablename__ = 'rate'
+    __table_args__ = {'extend_existing': True}
+    id = Column(Integer, primary_key=True)
+    data = Column(JSON)
+    date = Column(DateTime(timezone=True), server_default=func.now())
 
 
 class Feedback(Base):
