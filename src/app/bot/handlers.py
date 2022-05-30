@@ -3,8 +3,8 @@ from telethon.sessions import StringSession
 from telethon.sync import TelegramClient
 
 from app.bot.service import user_create, change_city, START_MESSAGE, change_time_mailing, get_user_city, get_feedback
-from app.mailing.service import get_day_news
-from app.parser.service import WeatherService, get_pretty_rate
+from app.mailing.service import get_day_news, get_pretty_rate
+from app.parser.service import WeatherService
 from config.settings import BOT_TOKEN, API_ID, API_HASH, ADMIN_TG_ID
 from app.bot.buttons import start_markup
 

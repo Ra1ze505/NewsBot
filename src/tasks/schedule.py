@@ -13,8 +13,8 @@ app = Celery('tasks', broker=CELERY_BROKER_URL)
 
 app.conf.beat_schedule = {
     'parse-news-every-day': {
-        'task': 'tasks.schedule.parse_news',
-        'schedule': crontab(minute=0, hour='*'),
+        'task': 'tasks.schedule.parse_all',
+        'schedule': timedelta(minutes=30),
     },
     'add-mailing-tasks-every-30-minute': {
         'task': 'tasks.schedule.create_hour_task',
@@ -24,9 +24,9 @@ app.conf.beat_schedule = {
 
 
 @app.task
-def parse_news():
+def parse_all():
     parser = Parser()
-    parser.client.loop.run_until_complete(Parser().parse_last_news())
+    parser.client.loop.run_until_complete(Parser().parse_all())
 
 
 @app.task

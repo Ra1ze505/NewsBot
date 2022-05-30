@@ -1,5 +1,4 @@
 import asyncio
-import json
 import logging
 
 import aiohttp
@@ -7,7 +6,7 @@ from sqlalchemy.exc import IntegrityError
 from telethon.tl.types import Message
 
 from config.settings import WEATHER_API_URL, WEATHER_API_KEY, CURRENCY_API_URL, WEATHER_API_NOW_URL
-from models import NewsMessage, get_async_session
+from models import NewsMessage, Rate, get_async_session
 
 logger = logging.getLogger(__name__)
 
@@ -19,12 +18,6 @@ PRETTY_WEATHER_MESSAGE = '''
 -- Cредняя температура  {mean_temp}°C
 -- Максимальная температура {max_temp}°C
 -- Минимальная температура {min_temp}°C'''
-
-PRETTY_RATE_MESSAGE = '''
-**Курс валют на сегодня**
-Доллар: {usd}
-Евро: {eur}
-'''
 
 PRETTY_WEATHER_NOW_MESSAGE = '''
 **Погода в городе {city}:**
@@ -67,6 +60,17 @@ async def create_news(message: Message) -> None:
             logger.debug('News already exists')
 
 
+async def create_rate(data: dict) -> None:
+    """
+    Create rate from data
+    :param data: dict
+    """
+    async with async_session() as session:
+        rate = Rate(data=data)
+        session.add(rate)
+        await session.commit()
+
+
 class WeatherService:
     ERROR_MESSAGE = 'Не удалось получить погоду. Попробуйте позже'
 
@@ -102,27 +106,6 @@ class WeatherService:
             url = WEATHER_API_URL.format(city=city, token=WEATHER_API_KEY)
             async with session.get(url, timeout=TIMEOUT_SECONDS) as resp:
                 return await resp.json()
-
-
-@timeout_exception_handler('Не удалось получить курс. Попробуйте позже')
-async def get_pretty_rate() -> str:
-    """
-    Get pretty rate
-    :return: str
-    """
-    rate = await _get_rate()
-    usd = round(rate['Valute']['USD']['Value'], 2)
-    eur = round(rate['Valute']['EUR']['Value'], 2)
-    return PRETTY_RATE_MESSAGE.format(usd=usd, eur=eur)
-
-
-async def _get_rate() -> dict:
-    async with aiohttp.ClientSession() as session:
-        url = CURRENCY_API_URL
-        async with session.get(url, timeout=TIMEOUT_SECONDS) as resp:
-            data = await resp.read()
-            data_json = json.loads(data)
-            return data_json
 
 
 def _get_wind_direction(wind_deg: int) -> str:
