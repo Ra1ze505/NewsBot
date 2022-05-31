@@ -2,7 +2,8 @@ from telethon import events
 from telethon.sessions import StringSession
 from telethon.sync import TelegramClient
 
-from app.bot.service import user_create, change_city, START_MESSAGE, change_time_mailing, get_user_city, get_feedback
+from app.bot.service import user_create, change_city, START_MESSAGE, change_time_mailing, get_user_city, get_feedback, \
+    get_username
 from app.mailing.service import get_day_news, get_pretty_rate
 from app.parser.service import WeatherService
 from config.settings import BOT_TOKEN, API_ID, API_HASH, ADMIN_TG_ID
@@ -53,7 +54,8 @@ async def help_handler(event: events.NewMessage.Event):
 async def write_us_handler(event: events.NewMessage.Event):
     async with bot.conversation(event.sender_id) as conv:
         feedback = await get_feedback(conv)
-    await bot.send_message(ADMIN_TG_ID, f'Новый отзыв: {feedback}')
+    username = await get_username(event)
+    await bot.send_message(ADMIN_TG_ID, f'Новый отзыв от {username} : {feedback}')
 
 
 @bot.on(events.NewMessage(pattern=r'О боте$'))
