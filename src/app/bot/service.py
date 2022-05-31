@@ -4,6 +4,7 @@ from typing import Optional
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 import aiohttp
+from telethon.events import NewMessage
 
 from app.bot.buttons import cansel_markup, start_markup, change_time_markup, change_city_markup
 from models import User, Feedback, get_async_session
@@ -144,3 +145,10 @@ async def _get_feedback(conv) -> Optional[str]:
     if answer.text == 'Отмена':
         return None
     return answer.raw_text
+
+
+async def get_username(event: NewMessage.Event) -> str:
+    username = event.sender.username
+    if username is None:
+        username = event.sender.first_name
+    return username
