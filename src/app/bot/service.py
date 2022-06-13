@@ -24,6 +24,7 @@ async def commit(session: AsyncSession):
     try:
         await session.commit()
     except Exception as e:
+        print(e)
         await session.rollback()
 
 

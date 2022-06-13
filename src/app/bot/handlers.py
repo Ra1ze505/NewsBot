@@ -8,15 +8,17 @@ from app.mailing.service import get_day_news, get_pretty_rate
 from app.parser.service import WeatherService
 from config.settings import BOT_TOKEN, API_ID, API_HASH, ADMIN_TG_ID
 from app.bot.buttons import start_markup
+from config import db
 
 
-bot = TelegramClient(StringSession(), API_ID, API_HASH).start(bot_token=BOT_TOKEN)
+bot = TelegramClient(StringSession(), API_ID, API_HASH)
 
 
 @bot.on(events.NewMessage(pattern='/start'))
 async def start_handler(event: events.NewMessage.Event):
     await user_create(event.sender_id)
     await event.respond(START_MESSAGE, buttons=start_markup)
+    print(db.async_connection_url())
 
 
 @bot.on(events.NewMessage(pattern=r'Изменить\sгород$'))
@@ -68,5 +70,7 @@ async def about_handler(event: events.NewMessage.Event):
 
 
 # For run bot
-with bot:
-    bot.run_until_disconnected()
+if __name__ == '__main__':
+    bot.start(bot_token=BOT_TOKEN)
+    with bot:
+        bot.run_until_disconnected()

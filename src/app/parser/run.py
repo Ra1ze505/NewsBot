@@ -37,4 +37,6 @@ class Parser:
 
 if __name__ == '__main__':
     p = Parser()
-    p.client.loop.run_until_complete(p.parse_rate())
+    # p.client.loop.run_until_complete(p.parse_rate())
+    p.client.loop.run_until_complete()
+
