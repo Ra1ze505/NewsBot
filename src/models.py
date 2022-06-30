@@ -41,6 +41,15 @@ class Feedback(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
 
+class Weather(Base):
+    __tablename__ = 'weather'
+    __table_args__ = {'extend_existing': True}
+    id = Column(Integer, primary_key=True)
+    city = Column(String)
+    data = Column(JSON)
+    date = Column(DateTime(timezone=True), server_default=func.now())
+
+
 def get_async_session():
     return sessionmaker(
         engine, expire_on_commit=False, class_=AsyncSession
