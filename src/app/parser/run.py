@@ -35,8 +35,8 @@ class Parser:
                 return data_json
 
 
-if __name__ == '__main__':
-    p = Parser()
-    # p.client.loop.run_until_complete(p.parse_rate())
-    p.client.loop.run_until_complete()
+# if __name__ == '__main__':
+#     p = Parser()
+#     # p.client.loop.run_until_complete(p.parse_rate())
+#     p.client.loop.run_until_complete()
 

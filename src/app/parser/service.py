@@ -5,7 +5,7 @@ import aiohttp
 from sqlalchemy.exc import IntegrityError
 from telethon.tl.types import Message
 
-from config.settings import WEATHER_API_URL, WEATHER_API_KEY, CURRENCY_API_URL, WEATHER_API_NOW_URL
+from config.settings import WEATHER_API_URL, WEATHER_API_KEY, WEATHER_API_NOW_URL
 from models import NewsMessage, Rate, get_async_session
 
 logger = logging.getLogger(__name__)
@@ -29,7 +29,7 @@ PRETTY_WEATHER_NOW_MESSAGE = '''
 Облачность: {clouds_all}%
 '''
 
-TIMEOUT_SECONDS = 5
+TIMEOUT_SECONDS = 10
 
 
 def timeout_exception_handler(error_msg: str) -> None:
@@ -75,7 +75,7 @@ class WeatherService:
     ERROR_MESSAGE = 'Не удалось получить погоду. Попробуйте позже'
 
     @timeout_exception_handler(ERROR_MESSAGE)
-    async def get_pretty_weather_by_day(self, city: str) -> str:
+    async def get_pretty_weather_for_day(self, city: str) -> str:
         weather = await self._get_weather_by_day(city)
 
         min_temp = int(min([temp['main']['temp_min'] for temp in weather['list']]))

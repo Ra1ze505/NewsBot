@@ -1,29 +1,29 @@
-from tests.setup_db import fake_db
+from types import MethodType
 
-from app.bot.handlers import start_handler
 import pytest
+from sqlalchemy import select
 
-
-class EventMock:
-    def __init__(self):
-        self.history = []
-        self.sender_id = 247719236
-
-    async def respond(self, text, *args, **kwargs):
-        self.history.append(text)
+from app.bot.handlers import start_handler, change_city_handler
+from app.bot import handlers
+from models import User
 
 
 @pytest.mark.asyncio
-async def test_handler(fake_db):
-    event = EventMock()
-    await start_handler(event)
-    # print(async_connection_url, 'test')
-    assert len(event.history) == 1
+async def test_handler(fake_async_connect, fake_event):
+    await start_handler(fake_event)
+    assert len(fake_event.history) == 1  # got received message
+
+    async with fake_async_connect() as session:
+        stmt = select([User]).where(User.chat_id == fake_event.sender_id)
+        _user = await session.execute(stmt)
+        user = _user.fetchone()
+
+    assert user is not None  # user created
 
 
-# def test_db_connection():
-#     db_prep(connection_url)
-#     engine = create_engine(db.connection_url)
-#     conn = engine.connect()
-#     conn.execute("select 1")
-#     conn.close()
+@pytest.mark.asyncio
+async def test_handler_change_city(fake_async_connect, fake_event, fake_conversation):
+    handlers.bot.conversation = MethodType(fake_conversation, handlers.bot)
+
+    await change_city_handler(fake_event)
+    print('End')

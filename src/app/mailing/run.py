@@ -18,7 +18,7 @@ class Mailing:
         user = await get_user_by_chat_id(user_id)
         news_message = await get_day_news()
         rate_message = await get_pretty_rate()
-        weather_message = await WeatherService().get_pretty_weather_by_day(user.city)
+        weather_message = await WeatherService().get_pretty_weather_for_day(user.city)
         await self.mailing(user.chat_id, [weather_message, rate_message, news_message.text])
 
     async def start_mailing(self):
@@ -40,6 +40,6 @@ class Mailing:
             pass
 
 
-if __name__ == '__main__':
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(Mailing().start_mailing())
+# if __name__ == '__main__':
+#     loop = asyncio.get_event_loop()
+#     loop.run_until_complete(Mailing().start_mailing())
